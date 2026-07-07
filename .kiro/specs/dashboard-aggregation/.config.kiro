@@ -1,0 +1,14 @@
+{
+  "specVersion": "1.0",
+  "name": "dashboard-aggregation",
+  "displayName": "Task B4 - Dashboard Aggregation",
+  "description": "Backend API endpoints for dashboard statistics, weekly summaries, budget tracking, and focus analytics",
+  "created": "2026-07-07",
+  "status": "active",
+  "phase": "implementation",
+  "dependencies": [
+    "backend-auth",
+    "backend-crud-endpoints"
+  ],
+  "tags": ["backend", "api", "analytics", "dashboard", "aggregation"]
+}

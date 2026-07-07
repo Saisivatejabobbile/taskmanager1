@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Connection Instructions</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        .step-content {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(100% - 60px);
+        }
+        .url-box {
+            background: #2d3748;
+            color: #4caf50;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+        }
+        .url-box:hover {
+            background: #1a202c;
+        }
+        .copy-hint {
+            font-size: 14px;
+            color: #a0aec0;
+            margin-top: 10px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .alternative {
+            background: #e3f2fd;
+            border: 2px dashed #2196f3;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 12px;
+        }
+        .alternative h3 {
+            color: #2196f3;
+            margin-top: 0;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .icon {
+            font-size: 48px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        ol li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Connect Your Phone</h1>
+        <p class="subtitle">Follow these simple steps to see the app on your phone</p>
+
+        <div class="warning">
+            <strong>⚠️ QR Code Not Working?</strong><br>
+            No problem! Use the manual URL method below instead. It's actually easier!
+        </div>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+                <strong>Open Expo Go App</strong>
+                <p>If you don't have it installed:</p>
+                <ul>
+                    <li><strong>Android:</strong> Download from Google Play Store</li>
+                    <li><strong>iOS:</strong> Download from App Store</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+                <strong>Enter URL Manually</strong>
+                <p>In Expo Go app, look for "Enter URL manually" or tap the connection icon</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+                <strong>Copy and Paste This URL:</strong>
+                <div class="url-box" onclick="copyURL()" id="urlBox">
+                    exp://192.168.0.194:8081
+                </div>
+                <div class="copy-hint">👆 Click to copy, then paste in Expo Go</div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+                <strong>Wait for App to Load</strong>
+                <p>The app will connect and load. You'll see:</p>
+                <ol>
+                    <li>Loading screen</li>
+                    <li>DayFlow splash screen</li>
+                    <li>Sign In/Sign Up screen</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="success">
+            <strong>✅ Connection Successful When You See:</strong><br>
+            Sign In screen with username and password fields
+        </div>
+
+        <div class="alternative">
+            <h3>🌐 Alternative: Test in Web Browser</h3>
+            <p>Can't get the phone connection working? No problem!</p>
+            <p><strong>Test the backend features in your browser instead:</strong></p>
+            <button onclick="window.open('TEST_CRUD_ENDPOINTS.html', '_blank')">
+                🧪 Open Backend Test Page
+            </button>
+            <p style="margin-top: 20px; color: #666;">
+                This is actually the <strong>NEW functionality</strong> - the backend CRUD operations!<br>
+                You can register, login, and test creating tasks, events, expenses, and categories.
+            </p>
+        </div>
+
+        <div class="warning">
+            <strong>🔧 Troubleshooting Tips:</strong>
+            <ol>
+                <li><strong>Same WiFi:</strong> Phone and computer must be on same network</li>
+                <li><strong>Check Firewall:</strong> Windows Firewall might block port 8081</li>
+                <li><strong>Restart:</strong> Close Expo Go completely and try again</li>
+                <li><strong>Check Terminal:</strong> Make sure dev server is still running</li>
+            </ol>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 40px; border-top: 2px solid #e0e0e0;">
+            <div class="icon">🎉</div>
+            <h3 style="color: #667eea;">Backend is Already Working!</h3>
+            <p style="color: #666; font-size: 16px;">
+                The main new features are in the backend API.<br>
+                You can test everything in your browser while figuring out phone connection!
+            </p>
+            <button onclick="window.open('TEST_CRUD_ENDPOINTS.html', '_blank')" style="max-width: 400px; margin: 20px auto;">
+                Start Testing Backend Now →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function copyURL() {
+            const url = 'exp://192.168.0.194:8081';
+            navigator.clipboard.writeText(url).then(() => {
+                const box = document.getElementById('urlBox');
+                box.style.background = '#28a745';
+                box.innerHTML = '✅ Copied! Paste in Expo Go';
+                setTimeout(() => {
+                    box.style.background = '#2d3748';
+                    box.innerHTML = 'exp://192.168.0.194:8081';
+                }, 2000);
+            }).catch(() => {
+                alert('Copy this URL: exp://192.168.0.194:8081');
+            });
+        }
+    </script>
+</body>
+</html>

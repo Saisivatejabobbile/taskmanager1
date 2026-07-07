@@ -1,0 +1,130 @@
+// Prisma schema for DayFlow - PostgreSQL Production
+// This schema is for cloud deployment (Railway, Render, etc.)
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique @db.VarChar(255)
+  name      String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  avatarUrl String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+
+  // Relations
+  tasks      Task[]
+  events     Event[]
+  expenses   Expense[]
+  categories Category[]
+  budgets    Budget[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// Task model
+model Task {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @db.Uuid
+  title          String   @db.VarChar(200)
+  notes          String?  @db.Text
+  dueDate        DateTime? @db.Timestamptz
+  priority       String   @db.VarChar(10)
+  categoryId     String?  @db.Uuid
+  status         String   @db.VarChar(20)
+  recurrenceRule String?  @db.Text
+  subtasks       String?  @db.Text
+  resourceLinks  String?  @db.Text
+  createdAt      DateTime @default(now()) @db.Timestamptz
+  updatedAt      DateTime @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, dueDate])
+  @@map("tasks")
+}
+
+// Event model
+model Event {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @db.Uuid
+  title            String   @db.VarChar(200)
+  eventDate        DateTime @db.Timestamptz
+  alertDaysBefore  Int
+  repeatsYearly    Boolean  @default(false)
+  category         String?  @db.VarChar(50)
+  createdAt        DateTime @default(now()) @db.Timestamptz
+  updatedAt        DateTime @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, eventDate])
+  @@map("events")
+}
+
+// Expense model
+model Expense {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @db.Uuid
+  amount         Float    @db.DoublePrecision
+  direction      String   @db.VarChar(10)
+  categoryId     String?  @db.Uuid
+  note           String?  @db.Text
+  occurredAt     DateTime @db.Timestamptz
+  recurrenceRule String?  @db.Text
+  createdAt      DateTime @default(now()) @db.Timestamptz
+  updatedAt      DateTime @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, occurredAt])
+  @@index([userId, direction])
+  @@map("expenses")
+}
+
+// Category model
+model Category {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  name      String   @db.VarChar(50)
+  type      String   @db.VarChar(10)
+  color     String   @db.VarChar(7)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, type])
+  @@map("categories")
+}
+
+// Budget model
+model Budget {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  categoryId   String   @db.Uuid
+  monthlyLimit Float    @db.DoublePrecision
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, categoryId])
+  @@map("budgets")
+}

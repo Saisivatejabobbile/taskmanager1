@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard API Tester - DayFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6B7680;
+            font-size: 16px;
+        }
+
+        .auth-section {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .section {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            color: #1C2430;
+            font-size: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+        }
+
+        .response {
+            background: #F3F5F4;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .response.success {
+            border-color: #10B981;
+            background: #ECFDF5;
+        }
+
+        .response.error {
+            border-color: #EF4444;
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        .status.authenticated {
+            background: #ECFDF5;
+            color: #10B981;
+        }
+
+        .status.unauthenticated {
+            background: #FEF2F2;
+            color: #EF4444;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Dashboard API Tester</h1>
+            <p class="subtitle">Test all DayFlow dashboard aggregation endpoints</p>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="auth-section">
+            <h2>🔐 Authentication
+                <span class="status unauthenticated" id="authStatus">Not Authenticated</span>
+            </h2>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="user@example.com" value="test@example.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" value="password123">
+            </div>
+            <div class="button-group">
+                <button class="btn-success" onclick="login()">
+                    🔓 Login
+                </button>
+                <button class="btn-danger" onclick="logout()">
+                    🚪 Logout
+                </button>
+            </div>
+            <div id="authResponse"></div>
+        </div>
+
+        <!-- Dashboard Endpoints Grid -->
+        <div class="grid">
+            <!-- Dashboard Stats -->
+            <div class="section">
+                <h2>📈 Dashboard Stats</h2>
+                <p class="subtitle" style="margin-bottom: 16px;">Get real-time statistics</p>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="getDashboardStats()">
+                        Get Stats
+                    </button>
+                </div>
+                <div id="statsResponse"></div>
+            </div>
+
+            <!-- Weekly Summary -->
+            <div class="section">
+                <h2>📅 Weekly Summary</h2>
+                <p class="subtitle" style="margin-bottom: 16px;">Analytics and insights</p>
+                <div class="input-group">
+                    <label>Week (optional)</label>
+                    <input type="text" id="weekInput" placeholder="2026-W27 (leave empty for current)">
+                </div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="getWeeklySummary()">
+                        Get Summary
+                    </button>
+                </div>
+                <div id="summaryResponse"></div>
+            </div>
+
+            <!-- Budget Status -->
+            <div class="section">
+                <h2>💰 Budget Status</h2>
+                <p class="subtitle" style="margin-bottom: 16px;">Track spending vs budgets</p>
+                <div class="input-group">
+                    <label>Month (optional)</label>
+                    <input type="text" id="monthInput" placeholder="2026-07 (leave empty for current)">
+                </div>
+                <div class="button-group">
+                    <button class="btn-warning" onclick="getBudgetStatus()">
+                        Get Budgets
+                    </button>
+                </div>
+                <div id="budgetResponse"></div>
+            </div>
+
+            <!-- Focus Analytics -->
+            <div class="section">
+                <h2>🎯 Focus Analytics</h2>
+                <p class="subtitle" style="margin-bottom: 16px;">Focus session statistics</p>
+                <div class="input-group">
+                    <label>Period</label>
+                    <select id="periodInput" style="width: 100%; padding: 12px; border: 2px solid #E5E7EB; border-radius: 8px;">
+                        <option value="day">Day</option>
+                        <option value="week" selected>Week</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="getFocusStats()">
+                        Get Focus Stats
+                    </button>
+                </div>
+                <div id="focusResponse"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://192.168.0.194:3000';
+        let authToken = null;
+
+        // Login
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    document.getElementById('authStatus').textContent = 'Authenticated ✓';
+                    document.getElementById('authStatus').className = 'status authenticated';
+                    showResponse('authResponse', data, 'success');
+                } else {
+                    showResponse('authResponse', data, 'error');
+                }
+            } catch (error) {
+                showResponse('authResponse', { error: error.message }, 'error');
+            }
+        }
+
+        // Logout
+        function logout() {
+            authToken = null;
+            document.getElementById('authStatus').textContent = 'Not Authenticated';
+            document.getElementById('authStatus').className = 'status unauthenticated';
+            document.getElementById('authResponse').innerHTML = '';
+        }
+
+        // Get Dashboard Stats
+        async function getDashboardStats() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/dashboard/stats`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                showResponse('statsResponse', data, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showResponse('statsResponse', { error: error.message }, 'error');
+            }
+        }
+
+        // Get Weekly Summary
+        async function getWeeklySummary() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            const week = document.getElementById('weekInput').value;
+            const url = week 
+                ? `${API_BASE}/api/dashboard/weekly-summary?week=${week}`
+                : `${API_BASE}/api/dashboard/weekly-summary`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                showResponse('summaryResponse', data, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showResponse('summaryResponse', { error: error.message }, 'error');
+            }
+        }
+
+        // Get Budget Status
+        async function getBudgetStatus() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            const month = document.getElementById('monthInput').value;
+            const url = month 
+                ? `${API_BASE}/api/dashboard/budgets?month=${month}`
+                : `${API_BASE}/api/dashboard/budgets`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                showResponse('budgetResponse', data, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showResponse('budgetResponse', { error: error.message }, 'error');
+            }
+        }
+
+        // Get Focus Analytics
+        async function getFocusStats() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            const period = document.getElementById('periodInput').value;
+            const url = `${API_BASE}/api/dashboard/focus-stats?period=${period}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                showResponse('focusResponse', data, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showResponse('focusResponse', { error: error.message }, 'error');
+            }
+        }
+
+        // Show response in formatted JSON
+        function showResponse(elementId, data, type) {
+            const element = document.getElementById(elementId);
+            element.className = `response ${type}`;
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>

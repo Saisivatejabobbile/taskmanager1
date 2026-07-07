@@ -1,0 +1,73 @@
+========================================
+   DayFlow App - Manual Connection
+========================================
+
+MOBILE APP URL (Type this in Expo Go):
+exp://192.168.0.194:8081
+
+BACKEND API URL (Open in phone browser):
+http://192.168.0.194:3000
+
+========================================
+   STEPS TO CONNECT:
+========================================
+
+1. Download "Expo Go" app on your phone
+   - iOS: App Store
+   - Android: Play Store
+
+2. Open Expo Go app
+
+3. Tap "Enter URL manually" or similar button
+
+4. Type EXACTLY:
+   exp://192.168.0.194:8081
+
+5. Tap Connect or Go
+
+6. Wait 30-60 seconds for app to load
+
+7. App will open!
+
+========================================
+   WHAT TO DO IN THE APP:
+========================================
+
+1. Once app opens, tap "Settings" (bottom right)
+
+2. Scroll to "Backend API (Task B1)" section
+
+3. Tap "Test Backend Connection"
+   → Should show "Backend Connected ✅"
+
+4. Tap "Login / Register"
+
+5. Create a new account:
+   - Name: Your Name
+   - Email: test@example.com
+   - Password: testpass123
+   - Confirm: testpass123
+
+6. Tap "Create Account"
+   → Should show "Account created successfully!"
+
+7. Now you have a real account in the backend!
+
+========================================
+   TROUBLESHOOTING:
+========================================
+
+If connection fails:
+- Make sure phone is on SAME WiFi as computer
+- Check that both services are running (see terminal windows)
+- Try typing the URL manually instead of scanning
+- Verify IP address: 192.168.0.194
+
+========================================
+
+Both services are currently RUNNING ✅
+
+Mobile App: Port 8081
+Backend API: Port 3000
+
+========================================

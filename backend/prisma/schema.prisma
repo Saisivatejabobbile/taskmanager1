@@ -1,0 +1,117 @@
+// Prisma schema for DayFlow authentication system
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(uuid()) // UUID primary key with auto-generation
+  email     String   @unique // Unique email for login, indexed for efficient lookups
+  name      String   // User display name
+  password  String   // bcrypt hashed password (never store plaintext)
+  avatarUrl String?  // Optional profile picture URL
+  createdAt DateTime @default(now()) // Automatically set on creation
+  updatedAt DateTime @updatedAt // Automatically updated on modification
+
+  // Relations
+  tasks      Task[]
+  events     Event[]
+  expenses   Expense[]
+  categories Category[]
+
+  @@index([email]) // Index for efficient email lookups during login
+  @@map("users") // Map to 'users' table in database
+}
+
+// Task model with nested JSON structures
+model Task {
+  id             String   @id @default(uuid())
+  userId         String
+  title          String   // 1-200 characters
+  notes          String?  // Max 2000 characters
+  dueDate        DateTime?
+  priority       String   // enum: 'high', 'medium', 'low'
+  categoryId     String?
+  status         String   // enum: 'pending', 'completed'
+  recurrenceRule String?  // iCalendar RRULE format
+  subtasks       String?  // JSON array: [{ id, title, done }]
+  resourceLinks  String?  // JSON array: [{ url, label }]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, dueDate])
+  @@map("tasks")
+}
+
+// Event model for calendar entries
+model Event {
+  id               String   @id @default(uuid())
+  userId           String
+  title            String   // 1-200 characters
+  eventDate        DateTime
+  alertDaysBefore  Int      // Non-negative integer
+  repeatsYearly    Boolean  @default(false)
+  category         String?  // Max 50 characters
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, eventDate])
+  @@map("events")
+}
+
+// Expense model for financial tracking
+model Expense {
+  id             String   @id @default(uuid())
+  userId         String
+  amount         Float    // Positive number
+  direction      String   // enum: 'debit', 'credit'
+  categoryId     String?
+  note           String?  // Max 2000 characters
+  occurredAt     DateTime
+  recurrenceRule String?  // iCalendar RRULE format
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, occurredAt])
+  @@index([userId, direction])
+  @@map("expenses")
+}
+
+// Category model for organizing tasks and expenses
+model Category {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String   // 1-50 characters
+  type      String   // enum: 'task', 'expense'
+  color     String   // Hex format: #RRGGBB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, type])
+  @@map("categories")
+}

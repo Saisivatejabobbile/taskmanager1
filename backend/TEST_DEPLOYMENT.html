@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Deployed API - Railway</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #1C2430;
+            font-size: 36px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6B7680;
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .url-input {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .test-section {
+            background: #F9FAFB;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            color: #1C2430;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+        }
+
+        .response {
+            background: #1C2430;
+            color: #10B981;
+            padding: 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin-top: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .status-success {
+            background: #ECFDF5;
+            color: #065F46;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border-left: 4px solid #10B981;
+        }
+
+        .status-error {
+            background: #FEF2F2;
+            color: #991B1B;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border-left: 4px solid #EF4444;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Test Deployed API</h1>
+        <p class="subtitle">Verify your Railway deployment is working</p>
+
+        <!-- API URL Input -->
+        <div class="url-input">
+            <label>Railway API URL</label>
+            <input type="text" id="apiUrl" placeholder="https://your-app.railway.app" value="">
+        </div>
+
+        <!-- Health Check -->
+        <div class="test-section">
+            <h3>1. Health Check</h3>
+            <p style="color: #6B7680; margin-bottom: 16px;">Test if API is responding</p>
+            <button class="btn-primary" onclick="testHealth()">🏥 Test Health</button>
+            <div id="healthResponse"></div>
+        </div>
+
+        <!-- Root Endpoint -->
+        <div class="test-section">
+            <h3>2. Root Endpoint</h3>
+            <p style="color: #6B7680; margin-bottom: 16px;">Check API information</p>
+            <button class="btn-primary" onclick="testRoot()">📡 Test Root</button>
+            <div id="rootResponse"></div>
+        </div>
+
+        <!-- Register User -->
+        <div class="test-section">
+            <h3>3. Register New User</h3>
+            <p style="color: #6B7680; margin-bottom: 16px;">Create test account</p>
+            <button class="btn-success" onclick="testRegister()">✍️ Register Test User</button>
+            <div id="registerResponse"></div>
+        </div>
+
+        <!-- Login -->
+        <div class="test-section">
+            <h3>4. Login</h3>
+            <p style="color: #6B7680; margin-bottom: 16px;">Test authentication</p>
+            <button class="btn-success" onclick="testLogin()">🔐 Login</button>
+            <div id="loginResponse"></div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="test-section">
+            <h3>5. Dashboard Stats (Requires Login)</h3>
+            <p style="color: #6B7680; margin-bottom: 16px;">Test authenticated endpoint</p>
+            <button class="btn-primary" onclick="testDashboard()">📊 Get Dashboard Stats</button>
+            <div id="dashboardResponse"></div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        
+        function getApiUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (!url) {
+                alert('Please enter your Railway API URL');
+                return null;
+            }
+            return url.endsWith('/') ? url.slice(0, -1) : url;
+        }
+
+        async function testHealth() {
+            const apiUrl = getApiUrl();
+            if (!apiUrl) return;
+
+            const responseDiv = document.getElementById('healthResponse');
+            responseDiv.innerHTML = '<div class="status-success">Testing...</div>';
+
+            try {
+                const response = await fetch(`${apiUrl}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="status-success">✅ API is healthy!</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="status-error">❌ Health check failed</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="status-error">❌ Cannot connect to API</div>
+                    <div class="response">Error: ${error.message}\n\nCheck:\n1. URL is correct\n2. API is deployed\n3. No CORS errors</div>
+                `;
+            }
+        }
+
+        async function testRoot() {
+            const apiUrl = getApiUrl();
+            if (!apiUrl) return;
+
+            const responseDiv = document.getElementById('rootResponse');
+            responseDiv.innerHTML = '<div class="status-success">Testing...</div>';
+
+            try {
+                const response = await fetch(`${apiUrl}/`);
+                const data = await response.json();
+                
+                responseDiv.innerHTML = `
+                    <div class="status-success">✅ Root endpoint working!</div>
+                    <div class="response">${JSON.stringify(data, null, 2)}</div>
+                `;
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="status-error">❌ Root endpoint failed</div>
+                    <div class="response">Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function testRegister() {
+            const apiUrl = getApiUrl();
+            if (!apiUrl) return;
+
+            const responseDiv = document.getElementById('registerResponse');
+            responseDiv.innerHTML = '<div class="status-success">Registering user...</div>';
+
+            const randomId = Math.floor(Math.random() * 10000);
+            const testUser = {
+                name: "Test User",
+                email: `testuser${randomId}@example.com`,
+                password: "password123"
+            };
+
+            try {
+                const response = await fetch(`${apiUrl}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testUser)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.token;
+                    responseDiv.innerHTML = `
+                        <div class="status-success">✅ User registered successfully!</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="status-error">❌ Registration failed</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="status-error">❌ Registration error</div>
+                    <div class="response">Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function testLogin() {
+            const apiUrl = getApiUrl();
+            if (!apiUrl) return;
+
+            const responseDiv = document.getElementById('loginResponse');
+            responseDiv.innerHTML = '<div class="status-success">Logging in...</div>';
+
+            const credentials = {
+                email: "testuser@example.com",
+                password: "password123"
+            };
+
+            try {
+                const response = await fetch(`${apiUrl}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(credentials)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.token;
+                    responseDiv.innerHTML = `
+                        <div class="status-success">✅ Login successful! Token saved.</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="status-error">❌ Login failed (try registering first)</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="status-error">❌ Login error</div>
+                    <div class="response">Error: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function testDashboard() {
+            const apiUrl = getApiUrl();
+            if (!apiUrl) return;
+
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            const responseDiv = document.getElementById('dashboardResponse');
+            responseDiv.innerHTML = '<div class="status-success">Fetching dashboard stats...</div>';
+
+            try {
+                const response = await fetch(`${apiUrl}/api/dashboard/stats`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    responseDiv.innerHTML = `
+                        <div class="status-success">✅ Dashboard endpoint working!</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                } else {
+                    responseDiv.innerHTML = `
+                        <div class="status-error">❌ Dashboard request failed</div>
+                        <div class="response">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="status-error">❌ Dashboard error</div>
+                    <div class="response">Error: ${error.message}</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

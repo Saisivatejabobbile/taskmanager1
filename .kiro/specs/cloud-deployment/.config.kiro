@@ -1,0 +1,15 @@
+{
+  "specVersion": "1.0",
+  "name": "cloud-deployment",
+  "displayName": "Task C1 - Cloud Deployment",
+  "description": "Deploy backend API to Railway with PostgreSQL database for 24/7 availability",
+  "created": "2026-07-07",
+  "status": "active",
+  "phase": "implementation",
+  "dependencies": [
+    "backend-auth",
+    "backend-crud-endpoints",
+    "dashboard-aggregation"
+  ],
+  "tags": ["infrastructure", "deployment", "railway", "postgresql", "cloud"]
+}

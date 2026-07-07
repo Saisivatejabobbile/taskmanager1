@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Test Dashboard Now!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 60px;
+            border-radius: 32px;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.4);
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .emoji {
+            font-size: 120px;
+            margin-bottom: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            color: #1C2430;
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 900;
+        }
+
+        .subtitle {
+            color: #6B7680;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
+        .qr-box {
+            background: linear-gradient(135deg, #F3F5F4 0%, #E5E7EB 100%);
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 40px;
+        }
+
+        .qr-code {
+            width: 350px;
+            height: 350px;
+            margin: 0 auto 24px;
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .url {
+            background: #1C2430;
+            color: #10B981;
+            padding: 20px 32px;
+            border-radius: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .status {
+            display: inline-block;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 800;
+            margin: 32px 0;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .test-list {
+            text-align: left;
+            background: #FEF3C7;
+            padding: 32px;
+            border-radius: 20px;
+            margin-top: 32px;
+        }
+
+        .test-list h2 {
+            color: #92400E;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .test-list ol {
+            color: #78350F;
+            font-size: 18px;
+            line-height: 2;
+            margin-left: 24px;
+        }
+
+        .test-list li {
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #FCD34D;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">📊</div>
+        <h1>Scan to Test!</h1>
+        <p class="subtitle">Dashboard B4 Ready</p>
+        
+        <div class="status">✅ BOTH SERVERS RUNNING</div>
+
+        <div class="qr-box">
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=exp://192.168.0.194:8081" 
+                     alt="QR Code" 
+                     style="width: 100%; height: 100%;">
+            </div>
+            <div class="url">exp://192.168.0.194:8081</div>
+        </div>
+
+        <div class="test-list">
+            <h2>🎯 What to Check</h2>
+            <ol>
+                <li>Scan QR code with <span class="highlight">Expo Go</span></li>
+                <li>Login with your account</li>
+                <li>Go to <span class="highlight">Home Screen</span></li>
+                <li>Look at the <span class="highlight">4 stat cards</span> at top</li>
+                <li>Numbers should be <span class="highlight">REAL DATA</span></li>
+                <li>Not hardcoded (3, 15, 7, $450)</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 32px; border-top: 3px solid #E5E7EB;">
+            <p style="font-size: 18px; color: #6B7680; font-weight: 600;">
+                Backend: http://192.168.0.194:3000
+            </p>
+            <p style="font-size: 16px; color: #9CA3AF; margin-top: 8px;">
+                Task B4 - Dashboard Aggregation Complete ✅
+            </p>
+        </div>
+    </div>
+</body>
+</html>

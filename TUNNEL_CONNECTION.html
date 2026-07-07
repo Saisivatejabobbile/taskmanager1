@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Working Connection URL</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            color: #28a745;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .url-container {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            padding: 30px;
+            border-radius: 16px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .url-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+        .url-text {
+            color: #4caf50;
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .copy-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+        }
+        .copy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+        }
+        .copy-button:active {
+            transform: translateY(0);
+        }
+        .steps {
+            text-align: left;
+            margin: 30px 0;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        .step {
+            margin: 15px 0;
+            display: flex;
+            align-items: start;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-text {
+            flex: 1;
+            padding-top: 5px;
+        }
+        .info-box {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .info-box strong {
+            color: #28a745;
+            font-size: 18px;
+        }
+        .qr-note {
+            color: #999;
+            font-size: 14px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Tunnel Connection Ready!</h1>
+        <p class="subtitle">This URL will work from anywhere - no WiFi issues!</p>
+
+        <div class="url-container">
+            <div style="color: #a0aec0; font-size: 14px; margin-bottom: 10px;">📱 TUNNEL URL</div>
+            <div class="url-text" id="tunnelUrl">
+                exp://7aemyaw-anonymous-8081.exp.direct
+            </div>
+        </div>
+
+        <button class="copy-button" onclick="copyURL()">
+            📋 Copy URL to Clipboard
+        </button>
+
+        <div class="steps">
+            <h3 style="margin-top: 0; color: #28a745;">How to Connect:</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    <strong>Open Expo Go</strong> app on your phone
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    <strong>Click "Copy URL"</strong> button above
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    <strong>In Expo Go:</strong> Tap "Enter URL manually" or connection icon
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    <strong>Paste the URL</strong> and press connect/go
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-text">
+                    <strong>Wait ~30 seconds</strong> - First load takes time through tunnel
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Why This Works Better:</strong><br>
+            <div style="margin-top: 10px; color: #666;">
+                🌐 Tunnel bypasses WiFi/firewall issues<br>
+                ✅ Works from any network<br>
+                🔒 Secure connection through Expo servers<br>
+                ⚡ No network configuration needed
+            </div>
+        </div>
+
+        <div class="qr-note">
+            💡 You can also scan the QR code from your terminal if you prefer
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #e0e0e0;">
+            <p style="color: #666; margin-bottom: 15px;">
+                <strong>Or test the backend features in browser:</strong>
+            </p>
+            <button onclick="window.open('TEST_CRUD_ENDPOINTS.html', '_blank')" 
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                🧪 Test Backend API Instead
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function copyURL() {
+            const url = 'exp://7aemyaw-anonymous-8081.exp.direct';
+            const button = document.querySelector('.copy-button');
+            
+            navigator.clipboard.writeText(url).then(() => {
+                button.innerHTML = '✅ Copied! Now paste in Expo Go';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy URL to Clipboard';
+                    button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                }, 3000);
+            }).catch(() => {
+                alert('Copy this URL manually:\n\nexp://7aemyaw-anonymous-8081.exp.direct');
+            });
+        }
+    </script>
+</body>
+</html>

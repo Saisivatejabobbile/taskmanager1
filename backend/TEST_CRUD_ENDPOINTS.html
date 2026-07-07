@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DayFlow CRUD Endpoints</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 32px;
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .response {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 13px;
+        }
+        .status-ok {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .status-error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .success-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Test DayFlow CRUD Endpoints</h1>
+        
+        <div class="info-box">
+            <strong>ℹ️ Instructions:</strong> First, create an account or login to get your JWT token. Then use the token to test CRUD operations on Tasks, Events, Expenses, and Categories.
+        </div>
+
+        <!-- Authentication Section -->
+        <h2>1. Authentication</h2>
+        <div class="section">
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="authEmail" value="test@example.com" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="authPassword" value="password123" placeholder="At least 8 characters">
+            </div>
+            <div class="form-group">
+                <label>Name (for registration only):</label>
+                <input type="text" id="authName" value="Test User" placeholder="Your Name">
+            </div>
+            <div class="button-group">
+                <button onclick="register()">Register</button>
+                <button onclick="login()">Login</button>
+            </div>
+            <div class="response" id="authResponse"></div>
+        </div>
+
+        <!-- Tasks Section -->
+        <h2>2. Tasks CRUD</h2>
+        <div class="section">
+            <div class="form-group">
+                <label>Task Title:</label>
+                <input type="text" id="taskTitle" value="Complete project proposal" placeholder="Task title">
+            </div>
+            <div class="form-group">
+                <label>Priority:</label>
+                <select id="taskPriority">
+                    <option value="high">High</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="taskStatus">
+                    <option value="pending" selected>Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notes:</label>
+                <textarea id="taskNotes" placeholder="Optional notes">Include budget analysis</textarea>
+            </div>
+            <div class="form-group">
+                <label>Due Date:</label>
+                <input type="date" id="taskDueDate" value="2026-12-31">
+            </div>
+            <div class="button-group">
+                <button onclick="createTask()">Create Task</button>
+                <button onclick="listTasks()">List All Tasks</button>
+                <button onclick="getTask()">Get Task by ID</button>
+                <button onclick="updateTask()">Update Task</button>
+                <button onclick="deleteTask()">Delete Task</button>
+            </div>
+            <div class="response" id="taskResponse"></div>
+        </div>
+
+        <!-- Events Section -->
+        <h2>3. Events CRUD</h2>
+        <div class="section">
+            <div class="form-group">
+                <label>Event Title:</label>
+                <input type="text" id="eventTitle" value="Birthday Party" placeholder="Event title">
+            </div>
+            <div class="form-group">
+                <label>Event Date:</label>
+                <input type="date" id="eventDate" value="2026-12-25">
+            </div>
+            <div class="form-group">
+                <label>Alert Days Before:</label>
+                <input type="number" id="eventAlert" value="7" min="0">
+            </div>
+            <div class="form-group">
+                <label>Repeats Yearly:</label>
+                <select id="eventRepeats">
+                    <option value="true" selected>Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button onclick="createEvent()">Create Event</button>
+                <button onclick="listEvents()">List All Events</button>
+                <button onclick="getEvent()">Get Event by ID</button>
+                <button onclick="updateEvent()">Update Event</button>
+                <button onclick="deleteEvent()">Delete Event</button>
+            </div>
+            <div class="response" id="eventResponse"></div>
+        </div>
+
+        <!-- Expenses Section -->
+        <h2>4. Expenses CRUD</h2>
+        <div class="section">
+            <div class="form-group">
+                <label>Amount:</label>
+                <input type="number" id="expenseAmount" value="50.00" step="0.01" min="0.01">
+            </div>
+            <div class="form-group">
+                <label>Direction:</label>
+                <select id="expenseDirection">
+                    <option value="debit" selected>Debit (Spending)</option>
+                    <option value="credit">Credit (Income)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Note:</label>
+                <textarea id="expenseNote" placeholder="Optional note">Lunch at restaurant</textarea>
+            </div>
+            <div class="form-group">
+                <label>Occurred At:</label>
+                <input type="date" id="expenseDate" value="2026-07-07">
+            </div>
+            <div class="button-group">
+                <button onclick="createExpense()">Create Expense</button>
+                <button onclick="listExpenses()">List All Expenses</button>
+                <button onclick="getExpense()">Get Expense by ID</button>
+                <button onclick="updateExpense()">Update Expense</button>
+                <button onclick="deleteExpense()">Delete Expense</button>
+            </div>
+            <div class="response" id="expenseResponse"></div>
+        </div>
+
+        <!-- Categories Section -->
+        <h2>5. Categories CRUD</h2>
+        <div class="section">
+            <div class="form-group">
+                <label>Category Name:</label>
+                <input type="text" id="categoryName" value="Work" placeholder="Category name">
+            </div>
+            <div class="form-group">
+                <label>Type:</label>
+                <select id="categoryType">
+                    <option value="task" selected>Task</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Color (Hex):</label>
+                <input type="color" id="categoryColor" value="#667eea" onchange="updateColorInput(this.value)">
+                <input type="text" id="categoryColorText" value="#667eea" placeholder="#RRGGBB" pattern="^#[0-9A-Fa-f]{6}$">
+            </div>
+            <div class="button-group">
+                <button onclick="createCategory()">Create Category</button>
+                <button onclick="listCategories()">List All Categories</button>
+                <button onclick="getCategory()">Get Category by ID</button>
+                <button onclick="updateCategory()">Update Category</button>
+                <button onclick="deleteCategory()">Delete Category</button>
+            </div>
+            <div class="response" id="categoryResponse"></div>
+        </div>
+
+        <div class="success-box" style="margin-top: 30px;">
+            <strong>✅ All CRUD endpoints are now available!</strong> Test each operation above to verify the backend is working correctly.
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://192.168.0.194:3000/api';
+        let authToken = null;
+        let lastCreatedId = {};
+
+        function updateColorInput(value) {
+            document.getElementById('categoryColorText').value = value;
+        }
+
+        async function makeRequest(endpoint, method = 'GET', body = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+
+                if (authToken) {
+                    options.headers['Authorization'] = `Bearer ${authToken}`;
+                }
+
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(`${API_URL}${endpoint}`, options);
+                const data = await response.json();
+
+                return {
+                    status: response.status,
+                    data
+                };
+            } catch (error) {
+                return {
+                    status: 'ERROR',
+                    data: { error: error.message }
+                };
+            }
+        }
+
+        function displayResponse(elementId, response) {
+            const element = document.getElementById(elementId);
+            const statusClass = response.status >= 200 && response.status < 300 ? 'status-ok' : 'status-error';
+            
+            element.innerHTML = `
+                <div class="${statusClass}">Status: ${response.status}</div>
+                <pre>${JSON.stringify(response.data, null, 2)}</pre>
+            `;
+        }
+
+        // Authentication
+        async function register() {
+            const response = await makeRequest('/auth/register', 'POST', {
+                name: document.getElementById('authName').value,
+                email: document.getElementById('authEmail').value,
+                password: document.getElementById('authPassword').value
+            });
+            
+            if (response.data.token) {
+                authToken = response.data.token;
+            }
+            
+            displayResponse('authResponse', response);
+        }
+
+        async function login() {
+            const response = await makeRequest('/auth/login', 'POST', {
+                email: document.getElementById('authEmail').value,
+                password: document.getElementById('authPassword').value
+            });
+            
+            if (response.data.token) {
+                authToken = response.data.token;
+            }
+            
+            displayResponse('authResponse', response);
+        }
+
+        // Tasks
+        async function createTask() {
+            const response = await makeRequest('/tasks', 'POST', {
+                title: document.getElementById('taskTitle').value,
+                priority: document.getElementById('taskPriority').value,
+                status: document.getElementById('taskStatus').value,
+                notes: document.getElementById('taskNotes').value || null,
+                dueDate: document.getElementById('taskDueDate').value || null
+            });
+            
+            if (response.data.id) {
+                lastCreatedId.task = response.data.id;
+            }
+            
+            displayResponse('taskResponse', response);
+        }
+
+        async function listTasks() {
+            const response = await makeRequest('/tasks');
+            displayResponse('taskResponse', response);
+        }
+
+        async function getTask() {
+            if (!lastCreatedId.task) {
+                alert('Create a task first!');
+                return;
+            }
+            const response = await makeRequest(`/tasks/${lastCreatedId.task}`);
+            displayResponse('taskResponse', response);
+        }
+
+        async function updateTask() {
+            if (!lastCreatedId.task) {
+                alert('Create a task first!');
+                return;
+            }
+            const response = await makeRequest(`/tasks/${lastCreatedId.task}`, 'PUT', {
+                title: document.getElementById('taskTitle').value + ' - UPDATED',
+                priority: document.getElementById('taskPriority').value,
+                status: 'completed',
+                notes: 'Updated notes'
+            });
+            displayResponse('taskResponse', response);
+        }
+
+        async function deleteTask() {
+            if (!lastCreatedId.task) {
+                alert('Create a task first!');
+                return;
+            }
+            const response = await makeRequest(`/tasks/${lastCreatedId.task}`, 'DELETE');
+            displayResponse('taskResponse', response);
+        }
+
+        // Events
+        async function createEvent() {
+            const response = await makeRequest('/events', 'POST', {
+                title: document.getElementById('eventTitle').value,
+                eventDate: document.getElementById('eventDate').value,
+                alertDaysBefore: parseInt(document.getElementById('eventAlert').value),
+                repeatsYearly: document.getElementById('eventRepeats').value === 'true'
+            });
+            
+            if (response.data.id) {
+                lastCreatedId.event = response.data.id;
+            }
+            
+            displayResponse('eventResponse', response);
+        }
+
+        async function listEvents() {
+            const response = await makeRequest('/events');
+            displayResponse('eventResponse', response);
+        }
+
+        async function getEvent() {
+            if (!lastCreatedId.event) {
+                alert('Create an event first!');
+                return;
+            }
+            const response = await makeRequest(`/events/${lastCreatedId.event}`);
+            displayResponse('eventResponse', response);
+        }
+
+        async function updateEvent() {
+            if (!lastCreatedId.event) {
+                alert('Create an event first!');
+                return;
+            }
+            const response = await makeRequest(`/events/${lastCreatedId.event}`, 'PUT', {
+                title: document.getElementById('eventTitle').value + ' - UPDATED',
+                eventDate: document.getElementById('eventDate').value,
+                alertDaysBefore: 3,
+                repeatsYearly: false
+            });
+            displayResponse('eventResponse', response);
+        }
+
+        async function deleteEvent() {
+            if (!lastCreatedId.event) {
+                alert('Create an event first!');
+                return;
+            }
+            const response = await makeRequest(`/events/${lastCreatedId.event}`, 'DELETE');
+            displayResponse('eventResponse', response);
+        }
+
+        // Expenses
+        async function createExpense() {
+            const response = await makeRequest('/expenses', 'POST', {
+                amount: parseFloat(document.getElementById('expenseAmount').value),
+                direction: document.getElementById('expenseDirection').value,
+                note: document.getElementById('expenseNote').value || null,
+                occurredAt: document.getElementById('expenseDate').value
+            });
+            
+            if (response.data.id) {
+                lastCreatedId.expense = response.data.id;
+            }
+            
+            displayResponse('expenseResponse', response);
+        }
+
+        async function listExpenses() {
+            const response = await makeRequest('/expenses');
+            displayResponse('expenseResponse', response);
+        }
+
+        async function getExpense() {
+            if (!lastCreatedId.expense) {
+                alert('Create an expense first!');
+                return;
+            }
+            const response = await makeRequest(`/expenses/${lastCreatedId.expense}`);
+            displayResponse('expenseResponse', response);
+        }
+
+        async function updateExpense() {
+            if (!lastCreatedId.expense) {
+                alert('Create an expense first!');
+                return;
+            }
+            const response = await makeRequest(`/expenses/${lastCreatedId.expense}`, 'PUT', {
+                amount: 75.50,
+                direction: document.getElementById('expenseDirection').value,
+                note: 'Updated expense note',
+                occurredAt: document.getElementById('expenseDate').value
+            });
+            displayResponse('expenseResponse', response);
+        }
+
+        async function deleteExpense() {
+            if (!lastCreatedId.expense) {
+                alert('Create an expense first!');
+                return;
+            }
+            const response = await makeRequest(`/expenses/${lastCreatedId.expense}`, 'DELETE');
+            displayResponse('expenseResponse', response);
+        }
+
+        // Categories
+        async function createCategory() {
+            const response = await makeRequest('/categories', 'POST', {
+                name: document.getElementById('categoryName').value,
+                type: document.getElementById('categoryType').value,
+                color: document.getElementById('categoryColorText').value
+            });
+            
+            if (response.data.id) {
+                lastCreatedId.category = response.data.id;
+            }
+            
+            displayResponse('categoryResponse', response);
+        }
+
+        async function listCategories() {
+            const response = await makeRequest('/categories');
+            displayResponse('categoryResponse', response);
+        }
+
+        async function getCategory() {
+            if (!lastCreatedId.category) {
+                alert('Create a category first!');
+                return;
+            }
+            const response = await makeRequest(`/categories/${lastCreatedId.category}`);
+            displayResponse('categoryResponse', response);
+        }
+
+        async function updateCategory() {
+            if (!lastCreatedId.category) {
+                alert('Create a category first!');
+                return;
+            }
+            const response = await makeRequest(`/categories/${lastCreatedId.category}`, 'PUT', {
+                name: document.getElementById('categoryName').value + ' - UPDATED',
+                type: document.getElementById('categoryType').value,
+                color: '#ff5722'
+            });
+            displayResponse('categoryResponse', response);
+        }
+
+        async function deleteCategory() {
+            if (!lastCreatedId.category) {
+                alert('Create a category first!');
+                return;
+            }
+            const response = await makeRequest(`/categories/${lastCreatedId.category}`, 'DELETE');
+            displayResponse('categoryResponse', response);
+        }
+    </script>
+</body>
+</html>

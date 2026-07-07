@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DayFlow - QR Codes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 4em;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .status {
+            background: rgba(76, 175, 80, 0.9);
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .qr-box {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            display: inline-block;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .url {
+            background: #e8eaf6;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        .instructions {
+            background: #fff3e0;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+            border-left: 6px solid #ff9800;
+            text-align: left;
+        }
+        .instructions h3 {
+            color: #e65100;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        .instructions ol {
+            font-size: 1.2em;
+            line-height: 2.2;
+            margin-left: 25px;
+        }
+        .instructions li {
+            margin: 15px 0;
+        }
+        .instructions strong {
+            color: #d84315;
+        }
+        .note {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 6px solid #4caf50;
+        }
+        .note h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .note p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 DayFlow App</h1>
+            <div class="status">● FRONTEND & BACKEND RUNNING</div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>📱 Mobile App</h2>
+                <p class="subtitle">Scan with Expo Go</p>
+                <div class="qr-box">
+                    <div id="qr-mobile"></div>
+                </div>
+                <div class="url">exp://192.168.0.194:8081</div>
+                <p style="margin-top: 20px; color: #666; font-size: 1.1em;">
+                    This opens the complete DayFlow mobile app with all features + backend integration
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>🔐 Backend API</h2>
+                <p class="subtitle">Scan with phone camera</p>
+                <div class="qr-box">
+                    <div id="qr-backend"></div>
+                </div>
+                <div class="url">http://192.168.0.194:3000</div>
+                <p style="margin-top: 20px; color: #666; font-size: 1.1em;">
+                    This opens the backend API in your phone's browser for testing
+                </p>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Use:</h3>
+            <ol>
+                <li><strong>Download Expo Go</strong> app on your phone (App Store or Play Store)</li>
+                <li><strong>Make sure your phone is on the SAME WiFi</strong> as this computer</li>
+                <li><strong>Open Expo Go</strong> app</li>
+                <li><strong>Tap "Scan QR code"</strong> in Expo Go</li>
+                <li><strong>Point your phone</strong> at the <span style="color: #667eea;">MOBILE APP QR code</span> (left side)</li>
+                <li><strong>Wait 30-60 seconds</strong> for the app to build and load</li>
+                <li><strong>Test it!</strong> Go to Settings → Test Backend Connection</li>
+            </ol>
+        </div>
+
+        <div class="note">
+            <h3>✅ What You Can Do Now:</h3>
+            <p>
+                <strong>In the mobile app:</strong><br>
+                • Go to Settings → Backend API<br>
+                • Tap "Test Backend Connection" (should show ✅ Connected)<br>
+                • Tap "Login / Register"<br>
+                • Create a new account (saved to real backend!)<br>
+                • Login with your account<br>
+                • Check auth status to see your logged-in user<br>
+                • Use all features: Tasks, Calendar, Focus, Expenses, etc.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Generate Mobile App QR
+        new QRCode(document.getElementById('qr-mobile'), {
+            text: 'exp://192.168.0.194:8081',
+            width: 300,
+            height: 300,
+            colorDark: '#667eea',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Generate Backend API QR
+        new QRCode(document.getElementById('qr-backend'), {
+            text: 'http://192.168.0.194:3000',
+            width: 300,
+            height: 300,
+            colorDark: '#764ba2',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+</html>
